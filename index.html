@@ -8,19 +8,35 @@
     <!--Optional theme-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <!--Custom CSS-->
-    <!--<link rel="stylesheet" href="content/css/app.css" />-->
+    <link rel="stylesheet" href="Content/Game.css" />
 </head>
 <body>
-    <div ng-view></div>
+    <div ng-include="'app/game/GameView.html'"></div>
     
     <script src="Scripts/angular.js"></script>
     <script src="Scripts/angular-route.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
 
+   
+    
     <!--main app module-->
     <script src="app/app.module.js"></script>
+    <script src="app/game/GameModule.js"></script>
+    <script src="app/core/CoreModule.js"></script>
 
+    <!--Constant holder-->
+    <script src="app/core/Constants.js"></script>
+
+    <!--services-->
+    <script src="app/core/GameDataService.js"></script>
+
+    <!--app controllers-->
+    <script src="app/game/GameController.js"></script>
+
+   
+    
+    
     <!--project module-->
     <!--<script src="app/project/project.module.js"></script>
     <script src="app/project/config.route.js"></script>

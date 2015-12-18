@@ -9,9 +9,9 @@
         // Third party modules.
         'firebase',
 
-        // Custom modules.
-        //'app.core',
-        //'app.project'
+         //Custom modules.
+        'app.core',
+        'app.game'
       ])
       .config(['$routeProvider', configFunction])
       .run(runFunction, ['$rootScope', '$location']);
