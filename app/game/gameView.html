@@ -1,0 +1,55 @@
+﻿<div ng-controller="GameController as vm">
+
+   
+    <div class="div7" ng-show="vm.ShowLoading">
+        WAIT LOADING THE PAGE...
+    </div>
+
+    <div ng-show="vm.ShowMainPage">
+
+        <div class="div1">Welcome to XO Game</div>
+
+        <div class="div8" ng-show="vm.ShowPlayer1StartedTheGame">{{vm.player1}} has started the Game.</div>
+
+        <div>
+            <table>
+                <tr>
+                    <td><div class="div2">Your Name:</div></td>
+                    <td><textarea class="text1" ng-model="vm.PlayerName"></textarea></td>
+                    <td><button class="btn btn-info btn-lg btn1" ng-click="vm.StartTheGame()">{{vm.startTheGameLable}}</button></td>
+                </tr>
+            </table>
+        </div>
+
+      
+        <!--Boxes-->
+        <div class="div6" ng-show="vm.ShowBoxes">
+
+            <table class="table1">
+
+                <tr>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box1Style]" ng-click="vm.Box1Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box2Style]" ng-click="vm.Box2Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box3Style]" ng-click="vm.Box3Clicked()"></button></td>
+                </tr>
+
+                <tr>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box4Style]" ng-click="vm.Box4Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box5Style]" ng-click="vm.Box5Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box6Style]" ng-click="vm.Box6Clicked()"></button></td>
+                </tr>
+
+                <tr>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box7Style]" ng-click="vm.Box7Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box8Style]" ng-click="vm.Box8Clicked()"></button></td>
+                    <td><button ng-class="{0:'div3', 1:'div4', 2:'div5'}[vm.Box9Style]" ng-click="vm.Box9Clicked()"></button></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+    
+
+</div>
