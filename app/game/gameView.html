@@ -9,18 +9,10 @@
 
         <div class="div1">Welcome to XO Game</div>
 
-        <div class="div8" ng-show="vm.ShowPlayer1StartedTheGame">{{vm.player1}} has started the Game.</div>
-
-        <div>
-            <table>
-                <tr>
-                    <td><div class="div2">Your Name:</div></td>
-                    <td><textarea class="text1" ng-model="vm.PlayerName"></textarea></td>
-                    <td><button class="btn btn-info btn-lg btn1" ng-click="vm.StartTheGame()">{{vm.startTheGameLable}}</button></td>
-                </tr>
-            </table>
+        
+        <div class="div11" ng-show="vm.ShowWinner">
+            And The Winner is : {{vm.winner}}
         </div>
-
       
         <!--Boxes-->
         <div class="div6" ng-show="vm.ShowBoxes">
@@ -48,6 +40,8 @@
             </table>
 
         </div>
+
+        <div><button ng-click="vm.Reset()">Reset</button></div>
 
     </div>
     

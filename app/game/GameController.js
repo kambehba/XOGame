@@ -9,14 +9,18 @@
 
         var vm = this;
         vm.startTheGameLable = "Start the Game";
-        vm.ShowBoxes = false;
+        vm.ShowBoxes = true;
         vm.ShowLoading = true;
         vm.ShowMainPage = false;
-        vm.ShowPlayer1StartedTheGame = false;
         vm.player1 = "";
         vm.player2 = "";
         vm.PlayerName = "";
+        vm.winner = "";
         vm.IsSecondPlayer = false;
+        vm.showEnterName = true;
+        vm.playerVsPlayer = false;
+        vm.ShowWinner = false;
+        vm.BoxData = {};
         
         //Default all boxex to zero which is code for color white
         vm.Box1Style = 0;
@@ -29,38 +33,34 @@
         vm.Box8Style = 0;
         vm.Box9Style = 0;
 
-        //load color codes from database and paint the boxes 
-        LoadBoxColors();
-
-        //update player name based on first or second player situation
-        UpdatePageWithPlayer();
-
+        SetPlayersAndStartTheGame();
         
+        if (vm.IsSecondPlayer) LoadBoxColors();
+        else GameDataService.ClearAllBoxes().then(function (promise) { LoadBoxColors();});
+        
+        
+        /*****event handlers******/
+        
+        $scope.$on("boxChanged", function (event) {
+            if ($scope.isLoading) return;
+            LoadBoxColors();
+
+        });
+
+
         /*****puplic methods******/
-
-        vm.StartTheGame = function ()
+        vm.Reset = function()
         {
-            vm.IsSecondPlayer = false;
-            vm.ShowLoading = false;
-            vm.ShowMainPage = true;
-            vm.ShowBoxes = true;
-
-            //Check if user trys to join the game as oppose to starting the game
-            if (vm.startTheGameLable == "Join the Game") { vm.IsSecondPlayer = true; UpdateSecondPlayer(); return; }
-
-            //check if someone else has started the game
-            GameDataService.GetPlayer1().then(function (promise) {
-            vm.player1 = promise.name;
-            if (vm.player1 == "") {
-                vm.player1 = vm.PlayerName;
-                GameDataService.UpdatePlayer1(vm.player1).then(function (promise) {
-                    UpdatePageWithPlayer();
-                });
-            }
+            GameDataService.ResetTheGame().then(function (promise) {
+                GameDataService.ClearAllBoxes().then(function (promise) { LoadBoxColors(); });
             });
 
-            
+            //GameDataService.ResetTheGame().then(function (promise) {
+            //    LoadBoxColors();
+            //});
         }
+
+       
 
 
         //Box Click Handlers
@@ -131,6 +131,51 @@
         
 
         /*****private methods******/
+
+        function DoWeHaveWinner(boxData)
+        {
+            if (boxData[0].value == 1 && boxData[1].value == 1 && boxData[2].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+            if (boxData[3].value == 1 && boxData[4].value == 1 && boxData[5].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+            if (boxData[6].value == 1 && boxData[7].value == 1 && boxData[8].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+
+            if (boxData[0].value == 1 && boxData[3].value == 1 && boxData[6].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+            if (boxData[1].value == 1 && boxData[4].value == 1 && boxData[7].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+            if (boxData[2].value == 1 && boxData[5].value == 1 && boxData[8].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+
+            if (boxData[0].value == 1 && boxData[4].value == 1 && boxData[8].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+            if (boxData[2].value == 1 && boxData[4].value == 1 && boxData[6].value == 1) { vm.ShowWinner = true; vm.winner = "red"; }
+
+            if (boxData[0].value == 2 && boxData[1].value == 2 && boxData[2].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            if (boxData[3].value == 2 && boxData[4].value == 2 && boxData[5].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            if (boxData[6].value == 2 && boxData[7].value == 2 && boxData[8].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+
+            if (boxData[0].value == 2 && boxData[3].value == 2 && boxData[6].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            if (boxData[1].value == 2 && boxData[4].value == 2 && boxData[7].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            if (boxData[2].value == 2 && boxData[5].value == 2 && boxData[8].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+
+            if (boxData[0].value == 2 && boxData[4].value == 2 && boxData[8].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            if (boxData[2].value == 2 && boxData[4].value == 2 && boxData[6].value == 2) { vm.ShowWinner = true; vm.winner = "blue"; }
+            
+
+
+        }
+
+        function SetPlayersAndStartTheGame()
+        {
+            GameDataService.GetGameStatus().then(function (promise) {
+
+                if (promise.value == true) {
+                    vm.IsSecondPlayer = true;
+                   
+                }
+                else
+                {
+                    vm.IsSecondPlayer = false;
+                    GameDataService.StartTheGame();
+                }
+            });
+        }
+        
         function PaintBoxes(boxData) {
             vm.Box1Style = boxData[0].value;
             vm.Box2Style = boxData[1].value;
@@ -145,40 +190,14 @@
 
         }
 
-        function UpdatePageWithPlayer() {
-            GameDataService.GetPlayer1().then(function (promise) {
-                vm.ShowLoading = false;
-                vm.ShowMainPage = true;
-                vm.player1 = promise.name;
-                if (vm.player1 != "") {
-                    vm.startTheGameLable = "Join the Game";
-                    vm.ShowPlayer1StartedTheGame = true;
-                }
-                else {
-                    vm.startTheGameLable = "Start the Game";
-                    vm.ShowPlayer1StartedTheGame = false;
-                }
-
-            });
-
-            GameDataService.GetPlayer2().then(function (promise) {
-                vm.ShowLoading = false;
-                vm.ShowMainPage = true;
-                vm.player2 = promise.name;
-               
-            });
-        }
-
-        function UpdateSecondPlayer() {
-            
-            GameDataService.UpdatePlayer2(vm.PlayerName).then(function (promise) {UpdatePageWithPlayer();});
-        }
-
         function LoadBoxColors()
         {
             GameDataService.GetBoxColors().then(function (promise) {
                 var boxData = promise;
+                vm.ShowMainPage = true;
+                vm.ShowLoading = false;
                 PaintBoxes(boxData);
+                DoWeHaveWinner(boxData);
 
             });
 
